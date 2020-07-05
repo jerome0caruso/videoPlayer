@@ -40,7 +40,23 @@ function updateProgress() {
 function setVideoProgress() {
     video.currentTime = (+progress.value * video.duration) /100; //it take the percentage played and gives time in sec.
 } 
+//sound
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext;
 
+const volumeSlider = document.querySelector(".volume");
+const audioSource = audioCtx.createMediaElementSource(video);
+
+const gainNode = audioCtx.createGain();
+
+volumeSlider.addEventListener("input", function() {
+    gainNode.gain.value = this.value;
+})
+audioSource.connect(gainNode).connect(audioCtx.destination);
+
+
+
+//sound
 video.addEventListener("click", toggleVideoStatus);
 video.addEventListener("pause", updatePlayIcon);
 video.addEventListener("play", updatePlayIcon);
